@@ -1,10 +1,14 @@
-'use client';
+'use client'
 
-import React, { useEffect, useState } from "react";
-// import { connectTest, connectDbTest } from '@/src/app/api/test/reoute'
-import { getRequest } from '@/lib/fetch'
+import React from 'react';
 
-export default function TestPage() {
+const MainPage = () => {
 
-  return (<div>로그인 성공</div>)
-}
+  return (
+    <div>
+      main
+    </div>
+  );
+};
+
+export default MainPage;

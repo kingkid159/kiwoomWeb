@@ -31,7 +31,6 @@ export async function getRequest<T>(url: string, params: any): Promise<ResponseE
     credentials: "include",
     cache: "no-store",
   });
-
   if (!res.ok) {
     const error = await res.text();
     throw new Error(`Request failed: ${res.status} - ${error}`);

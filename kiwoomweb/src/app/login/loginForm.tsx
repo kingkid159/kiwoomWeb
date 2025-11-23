@@ -3,19 +3,20 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import TextField from '@/components/common/TextField'
-import { loginRequest, postRequest } from '@/lib/fetch'
+import { loginRequest, postRequest, getRequest } from '@/lib/fetch'
 
 export default function LoginForm() {
   const [loginId, setLoginId] = useState('')
   const [password, setPassword] = useState('')
   const router = useRouter()
 
+
   const loginClickHandler = (loginId: string, password: string) => {
     loginRequest('/auth/login', { loginId, password }).then(({ success, data }) => {
       if (success) {
         postRequest('/oauth/getToken', { loginId, password }).then(({ success, data }) => {
           if (success) {
-            router.push('/main')
+            router.push('/main');
           }
         })
       }
