@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, TouchEvent,useState, ReactElement } from "react";
+import { useEffect, useRef, TouchEvent, useState, ReactElement } from "react";
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  children:React.ReactNode;
+  children: React.ReactNode;
 }
 
 export default function BottomSheet({ open, onClose, children }: Props) {
@@ -13,14 +13,14 @@ export default function BottomSheet({ open, onClose, children }: Props) {
   const startY = useRef(0);
   const currentY = useRef(0);
   const THRESHOLD = 120;
- const [translateY, setTranslateY] = useState(100); 
+  const [translateY, setTranslateY] = useState(100);
 
   useEffect(() => {
     if (open) {
       requestAnimationFrame(() => setTranslateY(0));
+      document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
-      setTranslateY(100);
     }
   }, [open]);
 

@@ -4,19 +4,20 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import TextField from '@/components/common/TextField'
 import { loginRequest, postRequest, getRequest } from '@/lib/fetch'
+import { useAuthStore } from "@/store/auth";
 
 export default function LoginForm() {
   const [loginId, setLoginId] = useState('')
   const [password, setPassword] = useState('')
   const router = useRouter()
 
-
   const loginClickHandler = (loginId: string, password: string) => {
     loginRequest('/auth/login', { loginId, password }).then(({ success, data }) => {
       if (success) {
+        useAuthStore.getState().setAccessToken(data);
         postRequest('/oauth/getToken', { loginId, password }).then(({ success, data }) => {
           if (success) {
-            router.push('/main');
+            router.push('/rbs/myAccount');
           }
         })
       }
