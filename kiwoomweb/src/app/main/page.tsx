@@ -21,9 +21,8 @@ const Contents = ({ openSheet2 }: { openSheet2: () => void }) => {
 
           <div>
             <label className="text-gray-400 text-sm">그룹설명</label>
-            <input
-              type="text"
-              className="w-full border-b border-gray-200 focus:outline-none py-2"
+            <textarea
+              className="w-full border-b border-gray-200 focus:outline-none py-2 resize-none"
             />
           </div>
 
