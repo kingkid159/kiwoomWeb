@@ -61,7 +61,7 @@ export default function BottomSheet({ open, onClose, children }: Props) {
 
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end">
+    <div className="fixed inset-0 z-50 flex items-end">
       <div className="absolute inset-0 bg-gray-400/20"></div>
       <div
         ref={sheetRef}

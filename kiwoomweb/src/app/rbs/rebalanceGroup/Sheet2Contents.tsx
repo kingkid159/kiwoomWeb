@@ -6,6 +6,7 @@ import AccountEntity, { AccountDetail } from '@/type/account/AccountEntity';
 interface Props {
     select: Dispatch<SetStateAction<Array<AccountDetail>>>;
     selectedStock: Array<AccountDetail>;
+    onClose: Dispatch<SetStateAction<boolean>>;
 }
 
 const detailData = {
@@ -21,7 +22,7 @@ const detailData = {
     evlt_wght: '',
 };
 
-const Sheet2Contents = ({ select, selectedStock }: Props) => {
+const Sheet2Contents = ({ select, selectedStock, onClose }: Props) => {
     const [stockList, setStockList] = useState<Array<AccountDetail>>([detailData]);
     const [selectedList, setSelectedList] = useState<Array<AccountDetail>>(selectedStock);
 
@@ -41,20 +42,20 @@ const Sheet2Contents = ({ select, selectedStock }: Props) => {
 
     const saveHandler = () => {
         select(selectedList);
+        onClose(false)
     };
 
     return (
-        <div className="h-full overflow-auto p-4">
+        <div className="h-full overflow-auto p-2">
             <h1 className="text-center text-lg font-semibold pb-4">종목 선택</h1>
 
             <ul className="divide-y divide-gray-200">
                 {stockList.map((item, i) => (
-                    <li key={item.stk_cd} className="flex items-center justify-between py-3">
-                        <span className="text-gray-800 font-medium truncate max-w-[200px]">
+                    <li key={item.stk_cd} className="flex items-center justify-between py-2">
+                        <span className="text-gray-800 font-medium truncate max-w-[200px] text-sm">
                             {item.stk_nm}
                         </span>
                         <div className="flex items-center space-x-2">
-                            <span className="text-gray-500 truncate max-w-[100px]">Detail</span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="#007aff"

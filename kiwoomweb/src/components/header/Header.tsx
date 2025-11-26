@@ -11,7 +11,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="w-full h-14 flex items-center px-4 border-b md:hidden">
+      <header className="fixed bg-white z-30 w-full h-14 flex items-center px-4 border-b md:hidden">
         <button onClick={() => setOpen(true)}>
           <Bars3Icon className="h-6 w-6 text-gray-700" />
         </button>
@@ -20,7 +20,7 @@ export default function Header() {
 
       {/* 모바일 LNB 오버레이 */}
       {open && (
-        <div className="fixed inset-0 bg-black/50 z-50 md:hidden">
+        <div className="fixed inset-0 bg-black/50 z-40 md:hidden">
           <div className="w-64 h-full bg-white shadow-xl p-4">
             <button className="mb-4" onClick={() => setOpen(false)}>
               <XMarkIcon className="h-6 w-6 text-gray-700" />

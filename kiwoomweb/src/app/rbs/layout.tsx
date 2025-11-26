@@ -32,9 +32,9 @@ export default function RootLayout({
               hidden        
               md:block     
               w-64 shrink-0 
-              bg-gray-100 p-4
+              bg-gray-100 p-4 z-40
             "><Lnb /></aside>
-              <div className="flex-1 bg-white h-screen">
+              <div className="flex-1 bg-white h-screen w-full">
                 <Header />
                 {children}
               </div>
