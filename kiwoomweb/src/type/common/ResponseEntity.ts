@@ -1,5 +1,5 @@
-export default interface ResponseEntity<T = any> {
-  message: string;
-  success: boolean;
-  data: any;
+export default interface ResponseEntity<T = unknown> {
+    message: string;
+    success: boolean;
+    data: T;
 }
