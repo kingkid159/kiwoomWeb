@@ -27,7 +27,7 @@ const COLORS = [
     '#94a3b8', // slate-400
 ];
 
-const PieChartExample = <T extends Object>({ data }: Props<T>) => (
+const PieChartExample = <T extends object>({ data }: Props<T>) => (
     <PieChart
         style={{ width: '100%', maxWidth: '500px', maxHeight: '80vh', aspectRatio: 1 }}
         responsive
