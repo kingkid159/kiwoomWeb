@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, use } from 'react';
 import { getRequest } from '@/lib/fetch';
-import BottomSheet from '@/components/common/Sheet';
-import BottomSheet2 from '@/components/common/Sheet2';
+import BottomSheet from '@/components/common/BottomSheet/Sheet';
+import BottomSheet2 from '@/components/common/BottomSheet/Sheet2';
 import Sheet1Contents from './Sheet1Contents';
 import Sheet2Contents from './Sheet2Contents';
 import { PlusCircleIcon, XCircleIcon } from '@heroicons/react/16/solid';

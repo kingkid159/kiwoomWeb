@@ -1,6 +1,6 @@
 'use client';
-import PieChartExample from './pieChart';
-import BasicTable from './MuiDataTable';
+import PieChartExample from '@/components/common/chart/pieChart';
+import BasicTable from '../../../components/common/table/BasicTable';
 
 type Contact = {
     groupName: string;

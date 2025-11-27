@@ -4,8 +4,8 @@ import React, { useState, useEffect, use } from 'react';
 import { getRequest } from '@/lib/fetch';
 import AccountEntity, { AccountDetail } from '@/type/account/AccountEntity';
 import { PlusIcon } from '@heroicons/react/16/solid';
-import BottomSheet from '@/components/common/Sheet';
-import BottomSheet2 from '@/components/common/Sheet2';
+import BottomSheet from '@/components/common/BottomSheet/Sheet';
+import BottomSheet2 from '@/components/common/BottomSheet/Sheet2';
 
 const detailData = {
     cur_prc: '',
