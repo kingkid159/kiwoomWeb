@@ -2,11 +2,13 @@
 import { useState, useEffect, Dispatch, SetStateAction, useRef } from 'react';
 import { getRequest } from '@/lib/fetch';
 import AccountEntity, { AccountDetail } from '@/type/account/AccountEntity';
+import RebalanceGroup, { RebalanceGroupStock } from '@/type/rebalanceGroup/RebalanceGroup';
 
 interface Props {
     select: Dispatch<SetStateAction<Array<AccountDetail>>>;
     selectedStock: Array<AccountDetail>;
     onClose: Dispatch<SetStateAction<boolean>>;
+    groupData: RebalanceGroup | null;
 }
 
 const detailData = {
@@ -22,14 +24,20 @@ const detailData = {
     evlt_wght: '',
 };
 
-const Sheet2Contents = ({ select, selectedStock, onClose }: Props) => {
+const Sheet2Contents = ({ select, selectedStock, onClose, groupData }: Props) => {
     const [stockList, setStockList] = useState<Array<AccountDetail>>([detailData]);
     const [selectedList, setSelectedList] = useState<Array<AccountDetail>>(selectedStock);
+    const [alreadyUsedStocks, setAlreadyUsedStocks] = useState<Array<RebalanceGroupStock>>();
 
     useEffect(() => {
         getRequest<AccountEntity>('/account/myStock', { date: '20251122' }).then(({ data }) => {
             setStockList(data.day_bal_rt);
         });
+        getRequest<Array<RebalanceGroupStock>>('/rebalance/alreadyUsedStockList', null).then(
+            ({ data }) => {
+                setAlreadyUsedStocks(data);
+            }
+        );
     }, []);
 
     const selected = (isSelect: boolean, selectedData: AccountDetail) => {
@@ -42,39 +50,53 @@ const Sheet2Contents = ({ select, selectedStock, onClose }: Props) => {
 
     const saveHandler = () => {
         select(selectedList);
-        onClose(false)
+        onClose(false);
     };
 
     return (
-        <div className="h-full overflow-auto p-2">
-            <h1 className="text-center text-lg font-semibold pb-4">종목 선택</h1>
+        <div className="w-full h-full overflow-auto p-2">
+            <h1 className="text-center text-lg font-semibold pb-4 text-gray-500">종목 선택</h1>
 
             <ul className="divide-y divide-gray-200">
                 {stockList.map((item, i) => (
                     <li key={item.stk_cd} className="flex items-center justify-between py-2">
-                        <span className="text-gray-800 font-medium truncate max-w-[200px] text-sm">
+                        <span className="text-gray-600 font-medium truncate max-w-[200px] text-sm">
                             {item.stk_nm}
                         </span>
                         <div className="flex items-center space-x-2">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="#007aff"
-                                viewBox="0 0 24 24"
-                                className="w-5 h-5"
-                                onClick={() => selected(false, item)}
-                            >
-                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                            </svg>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="#ffffffff"
-                                stroke="#7c7c7cff"
-                                viewBox="0 0 24 24"
-                                className="w-5 h-5"
-                                onClick={() => selected(true, item)}
-                            >
-                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                            </svg>
+                            {(() => {
+                                const isSelected = selectedList.some(
+                                    (stock) => stock.stk_cd === item.stk_cd
+                                );
+
+                                const isAlreadyUsed = alreadyUsedStocks?.some(
+                                    (stock) =>
+                                        stock.stockCode === item.stk_cd &&
+                                        stock.groupId !== groupData?.id
+                                );
+                                return (
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill={
+                                            isSelected
+                                                ? '#007aff'
+                                                : isAlreadyUsed
+                                                ? '#a3a3a3'
+                                                : '#ffffffff'
+                                        }
+                                        stroke={isSelected ? 'none' : '#7c7c7cff'}
+                                        viewBox="0 0 24 24"
+                                        className="w-5 h-5"
+                                        onClick={
+                                            !isAlreadyUsed
+                                                ? () => selected(!isSelected, item)
+                                                : undefined
+                                        }
+                                    >
+                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                    </svg>
+                                );
+                            })()}
                         </div>
                     </li>
                 ))}

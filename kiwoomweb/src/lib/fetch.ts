@@ -13,7 +13,7 @@ export async function loginRequest<T>(url: string, params: unknown): Promise<Res
         cache: 'no-store',
     });
 
-    if (res.status === 401) {
+    if (res.status === 401 || res.status === 403) {
         refresh();
     }
 
@@ -33,7 +33,7 @@ export async function getRequest<T>(url: string, params: unknown): Promise<Respo
         cache: 'no-store',
     });
 
-    if (res.status === 401) {
+    if (res.status === 401 || res.status === 403) {
         refresh();
     }
 
@@ -54,7 +54,7 @@ export async function postRequest<T>(url: string, params: unknown): Promise<Resp
         cache: 'no-store',
     });
 
-    if (res.status === 401) {
+    if (res.status === 401 || res.status === 403) {
         refresh();
     }
 
@@ -74,7 +74,7 @@ export async function deleteRequest<T>(url: string, params: unknown): Promise<Re
         cache: 'no-store',
     });
 
-    if (res.status === 401) {
+    if (res.status === 401 || res.status === 403) {
         refresh();
     }
 

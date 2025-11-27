@@ -1,26 +1,23 @@
 'use client';
 import { AccountDetail } from '@/type/account/AccountEntity';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { postRequest } from '@/lib/fetch';
+import { deleteRequest, postRequest } from '@/lib/fetch';
+import RebalanceGroup from '@/type/rebalanceGroup/RebalanceGroup';
 
 interface Props {
     openSheet2: () => void;
     selectedStock: Array<AccountDetail>;
     onClose: Dispatch<SetStateAction<boolean>>;
+    groupData: RebalanceGroup | null;
 }
 
-type RequestDto = {
-    groupName: string;
-    groupDesc: string;
-    stockInfos: AccountDetail[];
-};
-
-const Sheet1Contents = ({ openSheet2, selectedStock, onClose }: Props) => {
-    const [params, setParams] = useState<RequestDto>({
-        groupName: '',
-        groupDesc: '',
-        stockInfos: {} as AccountDetail[], // 초기값 없으면 이렇게
-    });
+const Sheet1Contents = ({ openSheet2, selectedStock, onClose, groupData }: Props) => {
+    const [params, setParams] = useState(() => ({
+        id: groupData?.id ?? '',
+        groupName: groupData?.groupName ?? '',
+        groupDesc: groupData?.groupDesc ?? '',
+        stockInfos: [] as AccountDetail[],
+    }));
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -52,18 +49,27 @@ const Sheet1Contents = ({ openSheet2, selectedStock, onClose }: Props) => {
         });
     };
 
+    const deleteHandler = () => {
+        deleteRequest('/rebalance/deleteGroup', { groupId: groupData!.id }).then(({ success }) => {
+            if (success) {
+                onClose(false);
+            }
+        });
+    };
+
     return (
-        <div className="h-full overflow-auto p-4">
-            <div className="text-center text-lg font-semibold pb-4">그룹설정</div>
+        <div className="w-full h-full overflow-auto justify-center">
+            <div className="text-center text-lg font-semibold pb-4 text-gray-500">그룹설정</div>
 
             <div className="px-6 space-y-6">
                 <div>
                     <label className="text-gray-400 text-sm">그룹명</label>
                     <input
                         type="text"
-                        className="w-full border-b border-gray-200 focus:outline-none py-2"
+                        className="w-full border-b border-gray-200 focus:outline-none py-2 text-gray-600"
                         name="groupName"
                         onChange={handleInput}
+                        value={params?.groupName}
                     />
                 </div>
 
@@ -71,8 +77,9 @@ const Sheet1Contents = ({ openSheet2, selectedStock, onClose }: Props) => {
                     <label className="text-gray-400 text-sm">그룹설명</label>
                     <textarea
                         name="groupDesc"
-                        className="w-full border-b border-gray-200 focus:outline-none py-2 resize-none"
+                        className="w-full border-b border-gray-200 focus:outline-none py-2 resize-none text-gray-600"
                         onChange={handleTextarea}
+                        value={params?.groupDesc}
                     />
                 </div>
 
@@ -80,21 +87,29 @@ const Sheet1Contents = ({ openSheet2, selectedStock, onClose }: Props) => {
                     className="flex items-center justify-between py-3 border-b border-gray-200"
                     onClick={openSheet2}
                 >
-                    <span className="text-gray-900 font-medium">종목 선택</span>
+                    <span className="text-gray-500 font-medium ">종목 선택</span>
                     <span className="text-gray-400">{'>'}</span>
                 </div>
             </div>
             <div className="px-6">
                 {selectedStock.map((item) => (
-                    <div key={item.stk_cd} className="truncate w-[200px]">
+                    <div
+                        key={item.stk_cd}
+                        className="truncate w-[200px] text-gray-60 text-xs py-0.5"
+                    >
                         {item.stk_nm}
                     </div>
                 ))}
             </div>
-            <div className="w-full py-8 flex justify-center">
-                <button className="text-blue-600 font-semibold" onClick={() => saveHandler()}>
+            <div className="w-full py-8 flex justify-around">
+                <button className="text-sky-500 font-semibold" onClick={() => saveHandler()}>
                     저장
                 </button>
+                {groupData && (
+                    <button className="text-rose-500 font-semibold" onClick={() => deleteHandler()}>
+                        삭제
+                    </button>
+                )}
             </div>
         </div>
     );
