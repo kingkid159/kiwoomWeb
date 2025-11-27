@@ -16,6 +16,7 @@ const Sheet1Contents = ({ openSheet2, selectedStock, onClose, groupData }: Props
         id: groupData?.id ?? '',
         groupName: groupData?.groupName ?? '',
         groupDesc: groupData?.groupDesc ?? '',
+        groupPercent: groupData?.groupPercent ?? '',
         stockInfos: [] as AccountDetail[],
     }));
 
@@ -36,6 +37,15 @@ const Sheet1Contents = ({ openSheet2, selectedStock, onClose, groupData }: Props
             [name]: value,
         }));
     };
+
+    const handleNumberField = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const percent = Number.parseInt(e.target.value);
+        const val = percent > 100 ? e.target.value.slice(0, 1) : percent < 0 ? '0' : e.target.value
+        setParams((prev) => ({
+            ...prev,
+            ['groupPercent']: val,
+        }));
+    }
 
     const saveHandler = () => {
         setParams((prev) => {
@@ -80,6 +90,18 @@ const Sheet1Contents = ({ openSheet2, selectedStock, onClose, groupData }: Props
                         className="w-full border-b border-gray-200 focus:outline-none py-2 resize-none text-gray-600"
                         onChange={handleTextarea}
                         value={params?.groupDesc}
+                    />
+                </div>
+
+                <div>
+                    <label className="text-gray-400 text-sm">그룹 차지 비율</label>
+                    <input
+                        type="number"
+                        name="groupPercent"
+                        className="w-full border-b border-gray-200 focus:outline-none py-2 resize-none text-gray-600"
+                        onChange={handleNumberField}
+                        value={params?.groupPercent}
+                        max='100'
                     />
                 </div>
 

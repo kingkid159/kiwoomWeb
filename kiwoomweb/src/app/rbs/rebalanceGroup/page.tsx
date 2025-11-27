@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect, use, useMemo } from 'react';
 import { getRequest } from '@/lib/fetch';
 import BottomSheet from '@/components/common/BottomSheet/Sheet';
 import BottomSheet2 from '@/components/common/BottomSheet/Sheet2';
@@ -15,6 +15,7 @@ const detailData = {
     groupName: '',
     groupDesc: '',
     userId: 0,
+    groupPercent: '',
     insertTime: new Date(),
     updateTime: new Date(),
     stocks: [],
@@ -56,6 +57,13 @@ const RebalenceGroupPage = () => {
         }
     }, [open]);
 
+    const totalPercent = useMemo(() => {
+        return stockGroupList.reduce(
+            (acc, item) => acc + Number(item.groupPercent),
+            0
+        );
+    }, [stockGroupList]);
+
     const groupClickHandler = (data: RebalanceGroup) => {
         setGroupData(data);
         const stockArray: Array<AccountDetail> = [];
@@ -72,7 +80,8 @@ const RebalenceGroupPage = () => {
     return (
         <div>
             {/* 헤더 영역 */}
-            <div className="flex justify-end bg-white fixed top-14 left-0 w-full z-30 ">
+            <div className="flex justify-between bg-white fixed top-14 left-0 w-full z-30 ">
+                <div className="flex items-center mx-6 text-sm">총: {totalPercent}%</div>
                 <div
                     className="flex border mx-4 my-2 rounded-3xl p-2 text-gray-700 bg-sky-50 w-auto border-gray-300 shadow-sm "
                     onClick={() => setOpen(true)}
@@ -81,7 +90,7 @@ const RebalenceGroupPage = () => {
                     <span className="text-sm text-gray-500">추가</span>
                 </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 mt-28">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 mt-24">
                 {stockGroupList.map((item) => (
                     <div
                         className="flex justify-between items-center border border-gray-300 rounded-2xl py-4 px-4 text-gray-700 bg-neutral-50 shadow-sm hover:shadow-md transition-shadow duration-300"
@@ -89,6 +98,7 @@ const RebalenceGroupPage = () => {
                         key={item.id}
                     >
                         <span className="text-gray-500 truncate flex-1">{item.groupName}</span>
+                        <span className="text-gray-500 truncate">{item.groupPercent} %</span>
                     </div>
                 ))}
             </div>

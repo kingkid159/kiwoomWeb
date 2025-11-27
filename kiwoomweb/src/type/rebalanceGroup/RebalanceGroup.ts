@@ -3,6 +3,7 @@ export default interface RebalanceGroup {
     groupName: string;
     groupDesc: string;
     userId: number;
+    groupPercent: string;
     insertTime: Date;
     updateTime: Date;
     stocks: Array<RebalanceGroupStock>;
