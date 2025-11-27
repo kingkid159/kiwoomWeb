@@ -1,5 +1,5 @@
 'use client';
-import PieChartExample from '@/components/common/chart/pieChart';
+import PieChartExample from '@/components/common/chart/PieChartPage';
 import BasicTable from '../../../components/common/table/BasicTable';
 
 type Contact = {
